@@ -13,10 +13,11 @@
 
 ## Project Overview
 
-ClockWise aims to address the common challenges in scheduling and time management for both business owners and employees. Key features include:
+ClockWise aims to address the common challenges in scheduling and time management for both business owners and employees. 
+Key features include:
 - Easy management of employee availability and shifts.
 - Real-time notifications for scheduled events.
-- Role-based access for admins, employees, and guests.
+- Role-based access for admins, employees, and even for guests.
 - A responsive web interface for a seamless user experience.
 
 ## Technologies Used
