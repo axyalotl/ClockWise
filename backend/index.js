@@ -1,14 +1,7 @@
-const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 5000;
+const app = require('./app'); // Import the app from app.js
 
-// Middleware to parse JSON requests
-app.use(express.json());
-
-// Basic route to test if the server is running
-app.get('/', (req, res) => {
-  res.send('ClockWise Backend Running');
-});
+// Use the PORT from .env, defaulting to 3003 if not specified
+const PORT = process.env.PORT || 3003;
 
 // Start the server
 app.listen(PORT, () => {
