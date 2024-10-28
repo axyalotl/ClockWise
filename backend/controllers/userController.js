@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require('../models/user');
 
 // Get all users
@@ -12,30 +13,40 @@ const getUsers = async (req, res) => {
 
 // Get a user by ID
 const getUserById = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const user = await User.findById(id);
-    if (!user) {
+    const { id } = req.params;
+  
+    // Check if the ID is a valid MongoDB ObjectID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to retrieve user' });
-  }
-};
+  
+    try {
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to retrieve user' });
+    }
+  };
 
 // Create a new user
 const createUser = async (req, res) => {
   const { name, email, password, role } = req.body;
 
+  // Validate required fields
+  if (!name || !email || !password) {
+    return res.status(400).json({ message: 'Name, email, and password are required' });
+  }
+
+  try {
     // Check if the email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-    return res.status(400).json({ message: 'User with this email already exists' });
+      return res.status(400).json({ message: 'User with this email already exists' });
     }
 
-  try {
     const newUser = new User({ name, email, password, role });
     await newUser.save();
     res.status(201).json(newUser);
@@ -48,6 +59,17 @@ const createUser = async (req, res) => {
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const { name, email, role } = req.body;
+
+  // Validate required fields for update
+  if (!name || !email) {
+    return res.status(400).json({ message: 'Name and email are required for update' });
+  }
+
+  // Check if the email is in a valid format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: 'Invalid email format' });
+  }
 
   try {
     const updatedUser = await User.findByIdAndUpdate(id, { name, email, role }, { new: true });
