@@ -1,31 +1,46 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from './AuthState';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './firebaseConfig'; // Ensure this file exports the Firebase auth instance
 
 const Register = () => {
     const [form, setForm] = useState({ username: '', password: '' });
-    const { login } = useContext(AuthContext);
+    const { login } = useContext(AuthContext); // This login function should set the auth state in your app
 
-    const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3003/api/users/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form),
-            });
-            const data = await response.json();
-            if (response.ok) login(data.user); // Log in the user after registration
+            const userCredential = await createUserWithEmailAndPassword(auth, form.username, form.password);
+            const user = userCredential.user;
+            login(user); // Log in the user after successful registration
         } catch (err) {
-            console.error('Error registering:', err);
+            console.error('Error registering with Firebase:', err);
+            alert('Registration failed. Please try again.');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <input name="username" type="text" placeholder="Username" onChange={handleChange} />
-            <input name="password" type="password" placeholder="Password" onChange={handleChange} />
+            <input
+                name="username"
+                type="email"
+                placeholder="Email"
+                onChange={handleChange}
+                value={form.username}
+                required
+            />
+            <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                onChange={handleChange}
+                value={form.password}
+                required
+            />
             <button type="submit">Register</button>
         </form>
     );

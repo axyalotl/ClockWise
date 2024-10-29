@@ -1,32 +1,46 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from './AuthState';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from './firebaseConfig'; // Ensure this file exports the Firebase auth instance
 
 const Login = () => {
     const [form, setForm] = useState({ username: '', password: '' });
-    const { login } = useContext(AuthContext);
+    const { login } = useContext(AuthContext); // This login function should handle setting the auth state in your app
 
-    const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    const handleChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3003/api/users/login', {
-               //Need to fix the actual routes your backend provides for registration and login
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form),
-            });
-            const data = await response.json();
-            if (response.ok) login(data.user); // Log in the user if successful
+            const userCredential = await signInWithEmailAndPassword(auth, form.username, form.password);
+            const user = userCredential.user;
+            login(user); // Log in the user if authentication is successful
         } catch (err) {
-            console.error('Error logging in:', err);
+            console.error('Error logging in with Firebase:', err);
+            alert('Failed to log in. Please check your credentials and try again.');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <input name="username" type="text" placeholder="Username" onChange={handleChange} />
-            <input name="password" type="password" placeholder="Password" onChange={handleChange} />
+            <input
+                name="username"
+                type="email"
+                placeholder="Email"
+                onChange={handleChange}
+                value={form.username}
+                required
+            />
+            <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                onChange={handleChange}
+                value={form.password}
+                required
+            />
             <button type="submit">Login</button>
         </form>
     );
