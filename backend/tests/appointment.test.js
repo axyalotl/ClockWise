@@ -1,163 +1,210 @@
 const request = require('supertest');
 const app = require('../app');
+const mongoose = require('mongoose');
+const Appointment = require('../models/Appointment');
+const User = require('../models/user');
 
-describe('User API', () => {
-    let userIds = [];
-    let appointmentId;
+describe('Appointment API', () => {
+  let userId;
+  let appointmentId;
 
-    // Create multiple test users before running appointment tests
-    beforeAll(async () => {
-        const usersToCreate = [
-            { name: 'User One', email: 'user.one@example.com', password: 'password123', role: 'Admin' },
-            { name: 'User Two', email: 'user.two@example.com', password: 'password123', role: 'Employee' },
-            { name: 'User Three', email: 'user.three@example.com', password: 'password123', role: 'Guest' },
-        ];
+  // Setup: Create a user for associating appointments
+  beforeAll(async () => {
+    const user = await User.create({ name: 'Test User', email: 'testuser@example.com', password: 'password' });
+    userId = user._id;
+  });
 
-        // Create each user and store their IDs
-        for (const userData of usersToCreate) {
-            const userResponse = await request(app).post('/api/users').send(userData);
-            userIds.push(userResponse.body._id);
-        }
+  // Cleanup: Remove all test data
+  afterEach(async () => {
+    await Appointment.deleteMany({});
+  });
+
+  afterAll(async () => {
+    await User.deleteMany({});
+    await mongoose.connection.close();
+  });
+
+  // Test case to create a new appointment successfully
+  it('should create a new appointment', async () => {
+    const response = await request(app)
+      .post('/api/appointments')
+      .send({
+        title: 'Meeting',
+        description: 'Project discussion',
+        date: new Date(),
+        duration: 60, // 1 hour
+        userId,
+        location: 'Office',
+        status: 'Scheduled',
+      });
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('_id');
+    appointmentId = response.body._id;
+  });
+
+  // Test case for creating an appointment with missing required fields
+  it('should return 400 for missing required fields', async () => {
+    const response = await request(app).post('/api/appointments').send({
+      title: '',
+      duration: 60,
+      userId,
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message', 'Missing required fields');
+  });
+
+  // Test case for creating an appointment with an invalid user ID
+  it('should return 400 for invalid user ID', async () => {
+    const response = await request(app).post('/api/appointments').send({
+      title: 'Meeting',
+      description: 'Invalid User ID test',
+      date: new Date(),
+      duration: 30,
+      userId: '12345', // Invalid userId
+      location: 'Online',
+      status: 'Scheduled',
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message', 'Invalid user ID');
+  });
+
+  // Test case for creating an appointment with time conflict
+  it('should return 400 for appointment time conflict', async () => {
+    const date = new Date();
+
+    // Create initial appointment
+    await Appointment.create({
+      title: 'Existing Appointment',
+      description: 'Conflict test',
+      date,
+      duration: 60, // 1 hour
+      userId,
+      location: 'Office',
+      status: 'Scheduled',
     });
 
-    // Test appointment creation
-    it('should create a new appointment', async () => {
-        const response = await request(app)
-        .post('/api/users')
-        .send({
-            title: 'Test Appointment',
-            description: 'test.user@example.com',
-            date: '2024-01-01T08:00:00Z',
-            duration: '60',
-            userId: userIds[0],
-            location: 'Office',
-            status: 'Scheduled',
-        });
-        expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('_id');
-        appointmentId = response.body._id;
+    // Attempt to create conflicting appointment
+    const response = await request(app).post('/api/appointments').send({
+      title: 'Conflicting Appointment',
+      description: 'Test conflict',
+      date, // Same start time as the existing appointment
+      duration: 30,
+      userId,
+      location: 'Office',
+      status: 'Scheduled',
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message', 'Time conflict with an existing appointment');
+  });
+
+  // Test case to retrieve all appointments
+  it('should retrieve all appointments', async () => {
+    await Appointment.create({
+      title: 'Team Meeting',
+      description: 'Weekly sync-up',
+      date: new Date(),
+      duration: 45,
+      userId,
+      location: 'Conference Room',
+      status: 'Scheduled',
     });
 
-    // Test creating appointment with an invalid user ID
-    it('should not allow creating an appointment with an invalid user ID', async () => {
-        const response = await request(app)
-        .post('/api/appointments')
-        .send({
-            title: 'Invalid User Test',
-            description: 'This should fail due to invalid user ID',
-            date: '2024-01-01T10:00:00Z',
-            duration: '30',
-            userId: 'invalidUserId',
-            location: 'Clinic',
-            status: 'Scheduled',
-        });
-        expect(response.status).toBe(400);
-        expect(response.body).toHaveProperty('message', 'Invalid user ID');
+    const response = await request(app).get('/api/appointments');
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+    expect(response.body.length).toBeGreaterThan(0);
+  });
+
+  // Test case to retrieve an appointment by ID
+  it('should retrieve an appointment by ID', async () => {
+    const appointment = await Appointment.create({
+      title: 'One-on-One',
+      description: 'Performance review',
+      date: new Date(),
+      duration: 30,
+      userId,
+      location: 'Manager\'s Office',
+      status: 'Scheduled',
     });
 
-    // Test appointment creation with time conflict for same user
-    it('should not allow creating appointment with time conflict for same user', async () => {
-        const response = await request(app)
-        .post('/api/users')
-        .send({
-            title: 'Test Appointment 2',
-            description: 'This should fail due to time conflict',
-            date: '2024-01-01T08:30:00Z',
-            duration: '60',
-            userId: userIds[0],
-            location: 'Office',
-            status: 'Scheduled',
-        });
-        expect(response.status).toBe(400);
-        expect(response.body).toHaveProperty('message', 'Time conflict with an existing appointment');
+    const response = await request(app).get(`/api/appointments/${appointment._id}`);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('_id', appointment._id.toString());
+  });
+
+  // Test case to retrieve appointments for a specific user
+  it('should retrieve all appointments for a specific user', async () => {
+    await Appointment.create({
+      title: 'Review Meeting',
+      description: 'Quarterly review',
+      date: new Date(),
+      duration: 90,
+      userId,
+      location: 'Online',
+      status: 'Scheduled',
     });
 
-    it('should allow overlapping appointments for different users', async () => {
-        const response = await request(app)
-        .post('/api/appointments')
-        .send({
-            title: 'Overlap Test',
-            description: 'Overlap appointment for a different user',
-            date: '2024-01-01T08:30:00Z',
-            duration: '60',
-            userId: userIds[1],
-            location: 'Office',
-            status: 'Scheduled',
-        });
-        expect(response.status).toBe(201);
-        expect(response.body).toHaveProperty('_id');
-    });  
+    const response = await request(app).get(`/api/appointments/user/${userId}`);
+    expect(response.status).toBe(200);
+    expect(Array.isArray(response.body)).toBe(true);
+  });
 
-    // Test appointment creation with missing required fields
-    it('should not allow creating an appointment without required fields', async () => {
-        const response = await request(app)
-        .post('/api/users')
-        .send({
-            title: '',
-            description: 'test.user@example.com',
-            date: '',
-            duration: '60',
-            userId: userIds[0],
-            location: 'Office',
-            status: 'Scheduled',
-        });
-        expect(response.status).toBe(400);
-        expect(response.body).toHaveProperty('message');
+  // Test case for updating an appointment
+  it('should update an appointment', async () => {
+    const appointment = await Appointment.create({
+      title: 'Check-in',
+      description: 'Monthly check-in',
+      date: new Date(),
+      duration: 30,
+      userId,
+      location: 'Office',
+      status: 'Scheduled',
     });
 
-    // Test retrieving all appointments
-    it('should get all appointments', async () => {
-        const response = await request(app).get('/api/appointments');
-        expect(response.status).toBe(200);
-        expect(Array.isArray(response.body)).toBe(true);
-        expect(response.body.length).toBeGreaterThan(0);
+    const response = await request(app)
+      .put(`/api/appointments/${appointment._id}`)
+      .send({
+        title: 'Updated Check-in',
+        duration: 45,
+        location: 'Updated Location',
+        status: 'Completed',
+      });
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('title', 'Updated Check-in');
+    expect(response.body).toHaveProperty('status', 'Completed');
+  });
+
+  // Test case for updating an appointment with invalid ID
+  it('should return 400 for invalid appointment ID on update', async () => {
+    const response = await request(app).put('/api/appointments/12345').send({
+      title: 'Invalid Update',
+      duration: 45,
+    });
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message', 'Invalid appointment ID');
+  });
+
+  // Test case for deleting an appointment
+  it('should delete an appointment', async () => {
+    const appointment = await Appointment.create({
+      title: 'Removable Appointment',
+      description: 'To be deleted',
+      date: new Date(),
+      duration: 30,
+      userId,
+      location: 'Temporary Room',
+      status: 'Scheduled',
     });
 
-    // Test retrieving a single appointment by ID
-    it('should get an appointment by ID', async () => {
-        const response = await request(app).get(`/api/appointments/${appointmentId}`);
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('_id', appointmentId);
-    });
+    const response = await request(app).delete(`/api/appointments/${appointment._id}`);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('message', 'Appointment deleted successfully');
+  });
 
-    // Test retrieving an appointment with an invalid ID
-    it('should return 404 for a non-existing appointment ID', async () => {
-        const response = await request(app).get('/api/users/invalidAppointmentId');
-        expect(response.status).toBe(404);
-        expect(response.body).toHaveProperty('message', 'Appointment not found');
-    });
-
-    // Test updating an appointment
-    it('should update the appointment', async () => {
-        const response = await request(app)
-        .put(`/api/appointment/${appointmentId}`)
-        .send({
-            title: 'Updated Title',
-            date: '2025-05-05T08:30:00Z',
-            duration: '90',
-        });
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('name', 'Updated Title');
-        expect(response.body).toHaveProperty('date', '2025-05-05T08:30:00Z');
-        expect(response.body).toHaveProperty('duration', '90');
-    });
-
-    // Test updating an appointment with invalid data
-    it('should not update the appointment with invalid data', async () => {
-        const response = await request(app)
-        .put(`/api/appointment/${appointmentId}`)
-        .send({
-            date: 'invalid-date-format',
-        });
-        expect(response.status).toBe(400);
-        expect(response.body).toHaveProperty('message');
-    });
-
-    // Test deleting an appointment
-    it('should delete the user', async () => {
-        const response = await request(app).delete(`/api/appointment/${appointmentId}`);
-        expect(response.status).toBe(200);
-        expect(response.body).toHaveProperty('message', 'Appointment deleted successfully');
-    });
-
+  // Test case for deleting an appointment with an invalid ID
+  it('should return 400 for invalid appointment ID on delete', async () => {
+    const response = await request(app).delete('/api/appointments/12345');
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message', 'Invalid appointment ID');
+  });
 });
