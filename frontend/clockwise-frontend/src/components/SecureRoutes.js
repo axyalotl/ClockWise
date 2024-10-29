@@ -1,0 +1,40 @@
+import React, { useEffect, useState } from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { auth } from '../firebase'; // Adjust the path according to your project structure
+
+const SecureRoute = ({ component: Component, ...rest }) => {
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe(); // Cleanup the subscription on unmount
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // Show a loading indicator while checking authentication
+  }
+
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        isAuthenticated ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/login" /> // Redirect to the login page if not authenticated
+        )
+      }
+    />
+  );
+};
+
+export default SecureRoute;
