@@ -9,7 +9,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
-import SecureRoute from './components/SecureRoute';
+import SecureRoute from './components/SecureRoutes';
 
 function App() {
     return (
