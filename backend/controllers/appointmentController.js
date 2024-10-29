@@ -1,11 +1,14 @@
 const Appointment = require('../models/Appointment');
+const mongoose = require('mongoose');
 
 // Get all appointments
 const getAppointments = async (req, res) => {
   try {
     const appointments = await Appointment.find();
+    console.log("Retrieved appointments:", appointments); // Log data retrieved from DB
     res.status(200).json(appointments);
   } catch (error) {
+    console.error('Error retrieving appointments:', error.message);
     res.status(500).json({ message: 'Failed to retrieve appointments' });
   }
 };
@@ -14,6 +17,10 @@ const getAppointments = async (req, res) => {
 const getAppointmentById = async (req, res) => {
   const { id } = req.params;
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid appointment ID' });
+  }
+
   try {
     const appointment = await Appointment.findById(id);
     if (!appointment) {
@@ -21,66 +28,82 @@ const getAppointmentById = async (req, res) => {
     }
     res.status(200).json(appointment);
   } catch (error) {
+    console.error('Error retrieving appointment:', error.message);
     res.status(500).json({ message: 'Failed to retrieve appointment' });
   }
 };
 
 // Get all appointments for a specific user
 const getAppointmentsByUserId = async (req, res) => {
-    const { userId } = req.params;
-  
-    try {
-      const appointments = await Appointment.find({ userId });
-      if (appointments.length === 0) {
-        return res.status(404).json({ message: 'No appointments found for this user' });
-      }
-      res.status(200).json(appointments);
-    } catch (error) {
-      res.status(500).json({ message: 'Failed to retrieve appointments for the user' });
-    }
-  };
+  const { userId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: 'Invalid user ID' });
+  }
+
+  try {
+    const appointments = await Appointment.find({ userId });
+    res.status(200).json(appointments); // Return 200 with empty array if none are found
+  } catch (error) {
+    console.error('Error retrieving appointments for user:', error.message);
+    res.status(500).json({ message: 'Failed to retrieve appointments for the user' });
+  }
+};
 
 // Create a new appointment
 const createAppointment = async (req, res) => {
     const { title, description, date, duration, userId, location, status } = req.body;
   
-    try {
-      // Calculate the end time of the new appointment
-      const appointmentStart = new Date(date);
-      const appointmentEnd = new Date(appointmentStart.getTime() + duration * 60000); // duration is in minutes
+    if (!title || !description || !date || !duration || !userId || !location || !status) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ message: 'Invalid user ID' });
+    }
   
-      // Check for conflicting appointments
+    try {
+      const appointmentStart = new Date(date);
+      const appointmentEnd = new Date(appointmentStart.getTime() + duration * 60000);
+  
       const conflict = await Appointment.findOne({
         userId,
-        $or: [
-          { // Overlaps with an existing appointment's start time
-            date: { $lt: appointmentEnd },
-            $expr: { $gte: [{ $add: ["$date", "$duration"] }, appointmentStart] }
-          },
-          { // Starts during an existing appointment
-            date: { $gte: appointmentStart, $lt: appointmentEnd }
-          }
-        ]
+        date: { $lt: appointmentEnd },
+        $expr: {
+          $gt: [{ $add: ["$date", { $multiply: ["$duration", 60000] }] }, appointmentStart]
+        }
       });
   
       if (conflict) {
-        return res.status(400).json({ message: 'The user already has an appointment that conflicts with the requested time' });
+        return res.status(400).json({ message: 'Time conflict with an existing appointment' });
       }
   
-      // If no conflicts, create the new appointment
-      const newAppointment = new Appointment({ title, description, date, duration, userId, location, status });
+      const newAppointment = new Appointment({
+        title,
+        description,
+        date: appointmentStart,
+        duration,
+        userId,
+        location,
+        status,
+        end: appointmentEnd // Set 'end' here in the schema
+      });
+  
       await newAppointment.save();
-      res.status(201).json(newAppointment);
+      res.status(201).json(newAppointment); // Return 'end' in the response
     } catch (error) {
-      console.error('Error creating appointment:', error);
+      console.error('Error creating appointment:', error.message);
       res.status(500).json({ message: 'Failed to create appointment' });
     }
-  };
-  
+};  
+
 // Update an appointment
 const updateAppointment = async (req, res) => {
   const { id } = req.params;
   const { title, description, date, duration, location, status } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid appointment ID' });
+  }
 
   try {
     const updatedAppointment = await Appointment.findByIdAndUpdate(id, { title, description, date, duration, location, status }, { new: true });
@@ -89,6 +112,7 @@ const updateAppointment = async (req, res) => {
     }
     res.status(200).json(updatedAppointment);
   } catch (error) {
+    console.error('Error updating appointment:', error.message);
     res.status(500).json({ message: 'Failed to update appointment' });
   }
 };
@@ -97,6 +121,10 @@ const updateAppointment = async (req, res) => {
 const deleteAppointment = async (req, res) => {
   const { id } = req.params;
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid appointment ID' });
+  }
+
   try {
     const deletedAppointment = await Appointment.findByIdAndDelete(id);
     if (!deletedAppointment) {
@@ -104,6 +132,7 @@ const deleteAppointment = async (req, res) => {
     }
     res.status(200).json({ message: 'Appointment deleted successfully' });
   } catch (error) {
+    console.error('Error deleting appointment:', error.message);
     res.status(500).json({ message: 'Failed to delete appointment' });
   }
 };
