@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from './AuthState';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebaseConfig'; // Ensure this file exports the Firebase auth instance
+//import { auth } from './firebaseConfig'; // Ensure this file exports the Firebase auth instance
 
 const Login = () => {
     const [form, setForm] = useState({ username: '', password: '' });
-    const { login } = useContext(AuthContext); // This login function should handle setting the auth state in your app
+    const { login, auth } = useContext(AuthContext); // This login function should handle setting the auth state in your app
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });

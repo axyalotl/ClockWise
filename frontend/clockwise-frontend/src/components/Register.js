@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from './AuthState';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from './firebaseConfig'; // Ensure this file exports the Firebase auth instance
+//import { auth } from './firebaseConfig'; // Ensure this file exports the Firebase auth instance
 
 const Register = () => {
     const [form, setForm] = useState({ username: '', password: '' });
-    const { login } = useContext(AuthContext); // This login function should set the auth state in your app
+    const { login, auth } = useContext(AuthContext); // This login function should set the auth state in your app
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,6 +22,7 @@ const Register = () => {
             alert('Registration failed. Please try again.');
         }
     };
+
 
     return (
         <form onSubmit={handleSubmit}>
