@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Navbar, Container, Nav, NavDropdown, Form, FormControl, Card } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import './Dashboard.css';
+import './components/Dashboard.css';
 
 const SignupScreen = () => {
     return (
