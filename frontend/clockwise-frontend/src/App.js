@@ -11,19 +11,12 @@ import SecureRoute from './components/SecureRoutes';
 
 function App() {
     return (
-        <div className="App">
-            <AuthProvider>
-                <Router>
-                    <Routes>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/dashboard" element={<SecureRoute component={Dashboard} />} />
-                    </Routes>
-                </Router>
-            </AuthProvider>
-        </div>
+      <div className="App">
+        <Dashboard />
+      </div>
     );
-}
+  }
+  
 
 export default App;
 

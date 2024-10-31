@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Redirect } from 'react-router-dom';
-import { auth } from '../firebaseConfig.js';
+import { Route, Navigate } from 'react-router-dom';
+import { auth } from './firebaseConfig.js';
 
 const SecureRoute = ({ component: Component, ...rest }) => {
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ const SecureRoute = ({ component: Component, ...rest }) => {
         isAuthenticated ? (
           <Component {...props} />
         ) : (
-          <Redirect to="/login" /> // Redirect to the login page if not authenticated
+          <Navigate to="/login" /> // Redirect to the login page if not authenticated
         )
       }
     />
