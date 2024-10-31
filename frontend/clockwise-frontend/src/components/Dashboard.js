@@ -16,24 +16,39 @@ export default function Dashboard() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isSignup, setIsSignup] = useState(true); // Ensure isSignup is defined
-  
+
     // Handle form submission
-    const handleSubmit = async (e) => { // Ensure handleSubmit is defined
-      e.preventDefault();
-      try {
-        if (isSignup) {
-          await signup(email, password, username);
-        } else {
-          await login(email, password);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const userData = {
+            name: username, // Make sure these variables have the right values
+            email: email,
+            password: password
+        };
+
+        try {
+            const response = await fetch('http://localhost:3003/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                console.log('User created successfully:', data);
+            } else {
+                console.error('Failed to create user:', data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
-        navigate("/dashboard"); // Redirect to the dashboard after successful login/signup
-      } catch {
-        //console.error("Auth Error:", error);
-        setError("Failed to log in or create an account. Please try again.");
-      }
     };
 
-  return (
+
+    return (
     <div> 
         <header className="app-header">ClockWise</header>
         <div className="container">

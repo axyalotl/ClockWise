@@ -32,9 +32,10 @@ const Register = () => {
             await createUserWithEmailAndPassword(auth, email, password);
             
             // Now, send the username to your backend
-            await axios.post('YOUR_BACKEND_URL/api/users', {
-                username,
-                email
+            await axios.post('http://localhost:3003/api/users', {
+                name: username,
+                email: email,
+                password: password
             });
             
             // Log in the user after successful registration
