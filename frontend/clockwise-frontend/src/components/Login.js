@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { AuthContext } from './AuthState';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from './firebaseConfig'; // Ensure this file exports the Firebase auth instance
 import email_icon from './email.png';
@@ -8,7 +9,9 @@ import './Dashboard.css';
 
 const Login = () => {
     const [form, setForm] = useState({ email: '', password: '' });
-    const { login } = useContext(AuthContext); // This login function should handle setting the auth state in your app
+    const { login } = useAuth(); // This login function should handle setting the auth state in your app
+    const navigate = useNavigate();
+
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -55,9 +58,15 @@ const Login = () => {
                         required
                     />
                 </div>
-                <div className="forgot-password">Forgot password?</div>
+                <div className="forgot-password">
+                    <Link to="/forgot-password">Forgot password?</Link>
+                </div>
                 <div className="submit-container">
                     <button type="submit" className="submit">Login</button>
+                    <div className="toggle-text">
+                        <button type="button" onClick={() => navigate('/register')}>Don't have an account? Sign Up</button>
+
+                    </div>
                 </div>
             </form>
         </div>
