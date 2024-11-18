@@ -8,27 +8,26 @@ import password_icon from './password.png';
 import './Dashboard.css';
 
 const Login = () => {
-    const [form, setForm] = useState({ email: '', password: '' });
-    const { login } = useAuth(); // This login function should handle setting the auth state in your app
-    const navigate = useNavigate();
+const [form, setForm] = useState({ email: '', password: '' });
+const { login } = useAuth(); // This login function should handle setting the auth state in your app
+const navigate = useNavigate();
 
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, form.email, form.password);
-            const user = userCredential.user;
-            login(user); // Log in the user if authentication is successful
-        } catch (err) {
-            console.error('Error logging in with Firebase:', err);
-            alert('Failed to log in. Please check your credentials and try again.');
-        }
-    };
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Make a POST request to your backend login endpoint
+      const response = await fetch('http://localhost:3003/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
     return (
         <div className="container">
             <div className="header">
@@ -70,7 +69,9 @@ const Login = () => {
                 </div>
             </form>
         </div>
-    );
+      </form>
+    </div>
+  );
 };
 
 export default Login;

@@ -1,14 +1,27 @@
 const express = require('express');
-const { getUsers, createUser, updateUser, deleteUser, getUserById } = require('../controllers/userController');
+const { 
+  getUsers, 
+  createUser, 
+  updateUser, 
+  deleteUser, 
+  getUserById, 
+  loginUser, 
+  getUserAvailability // Import the new controller function
+} = require('../controllers/userController');
+
 const router = express.Router();
-//const User = require('../models/user');
 
-// Define the routes for the CRUD operations
-router.get('/', getUsers); // GET all users
-router.post('/', createUser); // CREATE a new user
-router.get('/:id', getUserById); // GET a user by ID
-router.put('/:id', updateUser); // UPDATE a user by ID
-router.delete('/:id', deleteUser); // DELETE a user by ID
+// Login route
+router.post('/login', loginUser);
 
+// Existing CRUD routes
+router.get('/', getUsers);
+router.post('/', createUser);
+router.get('/:id', getUserById);
+router.put('/:id', updateUser);
+router.delete('/:id', deleteUser);
+
+// New route for user availability
+router.get('/:id/availability', getUserAvailability);
 
 module.exports = router;
