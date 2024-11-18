@@ -1,0 +1,40 @@
+.welcome-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #4c00b4; /* Deep purple background */
+    color: #ffffff;
+    flex-direction: column;
+    text-align: center;
+}
+
+.welcome-screen h1 {
+    font-size: 5rem;
+    color: #f3e5f5; /* Light lavender color for contrast */
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.welcome-message {
+    font-size: 1.5rem;
+    color: #d1c4e9; /* Slightly lighter purple for a complementary look */
+    margin-bottom: 30px;
+}
+
+.welcome-button {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    color: #4c00b4;
+    background-color: #f3e5f5; /* Light purple button color */
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.welcome-button:hover {
+    transform: scale(1.05);
+    background-color: #d1c4e9; /* Slightly darker purple on hover */
+}

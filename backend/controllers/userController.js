@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
-//const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 
 // Get all users
 const getUsers = async (req, res) => {
@@ -14,75 +14,83 @@ const getUsers = async (req, res) => {
 
 // Get a user by ID
 const getUserById = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
 
-    // Check if the ID is a valid MongoDB ObjectID
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
-    try {
-      const user = await User.findById(id);
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-      res.status(200).json(user);
-    } catch (error) {
-      res.status(500).json({ message: 'Failed to retrieve user' });
-    }
-  };
-
-
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to retrieve user' });
+  }
+};
 
 // Create a new user
 const createUser = async (req, res) => {
-  const { name, email, password, role = 'User' } = req.body; // Default role to 'User' if not provided
+  const { name, email, password, role = 'User' } = req.body;
 
-  // Log the incoming request body
-  console.log('POST request received at /api/users with data:', req.body);
-
-  // Validate required fields
   if (!name || !email || !password) {
-    console.log('Validation failed: Missing required fields');
     return res.status(400).json({ message: 'Name, email, and password are required' });
   }
 
   try {
-    // Check if the email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      console.log('User with this email already exists');
       return res.status(400).json({ message: 'User with this email already exists' });
     }
 
-    // Create and save a new user
-    const newUser = new User({ name, email, password, role });
+    // Hash the password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({ name, email, password: hashedPassword, role });
     await newUser.save();
-    console.log('User saved to database successfully');
     res.status(201).json(newUser);
   } catch (error) {
-    console.error('Error creating user:', error);
     res.status(500).json({ message: 'Failed to create user', error: error.message });
   }
 };
 
-module.exports = { createUser };
+// Login user
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
 
-// Other controller functions...
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
 
+    // Compare the provided password with the hashed password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    res.status(200).json({ message: 'Login successful', user });
+  } catch (error) {
+    res.status(500).json({ message: 'Error logging in', error: error.message });
+  }
+};
 
 // Update a user
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const { name, email, role } = req.body;
 
-  // Validate required fields for update
   if (!name || !email) {
     return res.status(400).json({ message: 'Name and email are required for update' });
   }
 
-  // Check if the email is in a valid format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Invalid email format' });
@@ -114,10 +122,40 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// Get user availability
+const getUserAvailability = async (req, res) => {
+  const { id } = req.params;
+
+  // Validate the user ID
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: 'Invalid user ID' });
+  }
+
+  try {
+    // Find the user by ID
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Call the method to get available shifts
+    const availableShifts = await user.getAvailableShifts();
+
+    // Respond with the available shifts
+    res.status(200).json(availableShifts);
+  } catch (error) {
+    console.error('Error retrieving user availability:', error.message);
+    res.status(500).json({ message: 'Failed to retrieve availability', error });
+  }
+};
+
+
 module.exports = {
   getUsers,
   getUserById,
   createUser,
+  loginUser,
   updateUser,
   deleteUser,
+  getUserAvailability,
 };
