@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="12931144-4b51-465e-a137-e1737b4865e2" name="Changes" comment="Semi works but issues with firebase again" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="CSS File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/main" />
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--follow-tags" />
+        <option name="title" value="Current Branch" />
+      </GitPushTagMode>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;OPEN&quot;,
+      &quot;assignee&quot;: &quot;ash-mc&quot;,
+      &quot;author&quot;: &quot;JolinaJ&quot;
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ash-mc&quot;,
+    &quot;author&quot;: &quot;JolinaJ&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/axyalotl/ClockWise.git&quot;,
+    &quot;accountId&quot;: &quot;030a2269-74bd-4402-a6f0-8f85f22dfdd3&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2o0GA1crMn2PKFBakpNuwXkSRDp" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.RadMigrateCodeStyle": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.build.executor": "Run",
+    "npm.start.executor": "Run",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\CLion 2024.1.4\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\phill\CLionProjects\ClockWise\frontend\clockwise-frontend\src\components" />
+      <recent name="C:\Users\phill\CLionProjects\ClockWise\frontend\clockwise-frontend" />
+      <recent name="C:\Users\phill\CLionProjects\ClockWise\frontend" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.start">
+    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/clockwise-frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="build" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/clockwise-frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start" />
+        <item itemvalue="npm.build" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="12931144-4b51-465e-a137-e1737b4865e2" name="Changes" comment="" />
+      <created>1729998936014</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1729998936014</updated>
+      <workItem from="1729998938458" duration="2123000" />
+      <workItem from="1730139667589" duration="2749000" />
+      <workItem from="1730144872423" duration="3401000" />
+      <workItem from="1730155705513" duration="2164000" />
+      <workItem from="1730158461794" duration="3289000" />
+      <workItem from="1730318684740" duration="967000" />
+      <workItem from="1730337952932" duration="11459000" />
+      <workItem from="1730386678188" duration="15449000" />
+      <workItem from="1730407256922" duration="348000" />
+      <workItem from="1730407848376" duration="878000" />
+      <workItem from="1730414134421" duration="196000" />
+      <workItem from="1730415463540" duration="679000" />
+      <workItem from="1730566430898" duration="606000" />
+      <workItem from="1731873328655" duration="657000" />
+      <workItem from="1731874006621" duration="10418000" />
+      <workItem from="1732136513062" duration="17098000" />
+      <workItem from="1732156122587" duration="3293000" />
+    </task>
+    <task id="LOCAL-00001" summary="The rest of the APP for frontend">
+      <option name="closed" value="true" />
+      <created>1729999398991</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1729999398991</updated>
+    </task>
+    <task id="LOCAL-00002" summary="filling out the frontend missing parts before connection">
+      <option name="closed" value="true" />
+      <created>1730001052204</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730001052204</updated>
+    </task>
+    <task id="LOCAL-00003" summary="fixing the App.js fro frontend">
+      <option name="closed" value="true" />
+      <created>1730139975909</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1730139975909</updated>
+    </task>
+    <task id="LOCAL-00004" summary="fixing the App.js for frontend again">
+      <option name="closed" value="true" />
+      <created>1730141606537</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1730141606537</updated>
+    </task>
+    <task id="LOCAL-00005" summary="firebase auth for these">
+      <option name="closed" value="true" />
+      <created>1730147652906</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1730147652906</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Sucessfully connects with back and front and shows on mdb">
+      <option name="closed" value="true" />
+      <created>1730403200240</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1730403200240</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Semi works but issues with firebase again">
+      <option name="closed" value="true" />
+      <created>1732155349635</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1732155349635</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Semi works but issues with firebase again">
+      <option name="closed" value="true" />
+      <created>1732156389384</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1732156389384</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="The rest of the APP for frontend" />
+    <MESSAGE value="filling out the frontend missing parts before connection" />
+    <MESSAGE value="fixing the App.js fro frontend" />
+    <MESSAGE value="fixing the App.js for frontend again" />
+    <MESSAGE value="firebase auth for these" />
+    <MESSAGE value="Sucessfully connects with back and front and shows on mdb" />
+    <MESSAGE value="Semi works but issues with firebase again" />
+    <option name="LAST_COMMIT_MESSAGE" value="Semi works but issues with firebase again" />
+  </component>
+</project>
