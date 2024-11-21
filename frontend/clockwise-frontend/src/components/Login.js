@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { AuthContext } from './AuthState';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from './firebaseConfig'; // Ensure this file exports the Firebase auth instance
 import email_icon from './email.png';
@@ -7,25 +8,26 @@ import password_icon from './password.png';
 import './Dashboard.css';
 
 const Login = () => {
-    const [form, setForm] = useState({ email: '', password: '' });
-    const { login } = useContext(AuthContext); // This login function should handle setting the auth state in your app
+const [form, setForm] = useState({ email: '', password: '' });
+const { login } = useAuth(); // This login function should handle setting the auth state in your app
+const navigate = useNavigate();
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, form.email, form.password);
-            const user = userCredential.user;
-            login(user); // Log in the user if authentication is successful
-        } catch (err) {
-            console.error('Error logging in with Firebase:', err);
-            alert('Failed to log in. Please check your credentials and try again.');
-        }
-    };
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Make a POST request to your backend login endpoint
+      const response = await fetch('http://localhost:3003/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
     return (
         <div className="container">
             <div className="header">
@@ -55,13 +57,21 @@ const Login = () => {
                         required
                     />
                 </div>
-                <div className="forgot-password">Forgot password?</div>
+                <div className="forgot-password">
+                    <Link to="/forgot-password">Forgot password?</Link>
+                </div>
                 <div className="submit-container">
                     <button type="submit" className="submit">Login</button>
+                    <div className="toggle-text">
+                        <button type="button" onClick={() => navigate('/register')}>Don't have an account? Sign Up</button>
+
+                    </div>
                 </div>
             </form>
         </div>
-    );
+      </form>
+    </div>
+  );
 };
 
 export default Login;
