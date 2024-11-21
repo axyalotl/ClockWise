@@ -1,0 +1,21 @@
+/* frontend/src/styles/JoinCreate.css */
+
+.join-create-page {
+    margin: 2rem auto;
+    width: 50%;
+    text-align: center;
+}
+
+.success-message {
+    color: green;
+    font-weight: bold;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+}
+
+button {
+    margin: 1rem 0;
+}
