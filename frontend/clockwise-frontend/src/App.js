@@ -1,17 +1,15 @@
-// App.js
 import React from 'react';
 import './App.css';
-import { AuthProvider } from './contexts/AuthContext';
-
+import { Routes, Route } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
+import UserDashboard from './components/UserDashboard';
 
 function App() {
     return (
-        <AuthProvider>
-            <div className="App">
-                <Dashboard />
-            </div>
-        </AuthProvider>
+        <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/user-dashboard" element={<UserDashboard />} />
+        </Routes>
     );
 }
 

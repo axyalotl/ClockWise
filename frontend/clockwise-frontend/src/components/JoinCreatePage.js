@@ -1,6 +1,6 @@
-// components/JoinCreatePage.js
 import React, { useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import './JoinCreate.css';
 
 const JoinCreatePage = () => {
@@ -10,11 +10,12 @@ const JoinCreatePage = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
+    const navigate = useNavigate(); // Initialize navigate
+
     // Handle joining a team
     const handleJoinTeam = async (e) => {
         e.preventDefault();
         try {
-            // Replace with actual API call
             setSuccessMessage(`Joined team with code: ${teamCode}`);
             setErrorMessage('');
         } catch (error) {
@@ -27,7 +28,6 @@ const JoinCreatePage = () => {
     const handleCreateCompany = async (e) => {
         e.preventDefault();
         try {
-            // Replace with actual API call
             setSuccessMessage(`Company "${companyName}" created successfully`);
             setErrorMessage('');
             setShowCreateModal(false);
@@ -85,6 +85,17 @@ const JoinCreatePage = () => {
                     </Form>
                 </Modal.Body>
             </Modal>
+
+            {/* Skip Button */}
+            <div className="skip-container">
+                <button
+                    type="button"
+                    className="skip-button"
+                    onClick={() => navigate('/userdashboard')} // Navigate to User Dashboard
+                >
+                    Skip
+                </button>
+            </div>
         </div>
     );
 };
