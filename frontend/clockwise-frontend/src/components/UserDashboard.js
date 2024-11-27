@@ -5,6 +5,10 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import {Button, Form} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
+import axios from "axios";
+import {getUsers} from "../api";
+import { getAuth } from "firebase/auth";
+
 
 
 const UserDashboard = () => {
@@ -62,11 +66,19 @@ const UserDashboard = () => {
             e.preventDefault();
             try {
                 setSuccessMessage(`Company "${companyName}" created successfully`);
-                setErrorMessage('');
+
                 setShowCreateModal(false);
+                const auth = getAuth();
+                const user = auth.currentUser;
+                await axios.post('http://localhost:3003/api/company', {
+                    name: companyName,
+                    ownerId: user.uid
+
+                });
+
             } catch (error) {
                 setErrorMessage('Failed to create company');
-                setSuccessMessage('');
+
             }
         };
 
