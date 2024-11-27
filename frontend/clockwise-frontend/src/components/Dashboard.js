@@ -3,111 +3,63 @@ import { Button, Card, Form } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import UserDashboard from "./UserDashboard"; // Import UserDashboard
+
 import user_icon from "./person.png";
 import email_icon from "./email.png";
 import password_icon from "./password.png";
 
-
 import "./Dashboard.css";
 
+
+
 export default function Dashboard() {
-    const { currentUser} = useAuth(); // Get currentUser from AuthContext
+    const { login, signup, currentUser } = useAuth(); // Get currentUser, signup, and login from AuthContext
     const navigate = useNavigate(); // Initialize navigate for redirection
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [isSignup, setIsSignup] = useState(true);
-    const [showUserDashboard, setShowUserDashboard] = useState(false); // Add state for showing the user dashboard
     const [showJoinCreate, setShowJoinCreate] = useState(false);
+    const [showUserDashboard, setShowUserDashboard] = useState(false); // Add state for showing the user dashboard
 
-    // Handle form submission for Login/Signup
+    // Handle Signup or Login
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const userData = {
-            name: username,
-            email: email,
-            password: password,
-        };
-
         try {
-            const response = await fetch("http://localhost:3003/api/users", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(userData),
-            });
+            setError("");
 
-            const data = await response.json();
-            if (response.ok) {
-                console.log("User created successfully:", data);
-                setShowJoinCreate(true); // Show Join/Create page on success
-                //need to log in after creating an account
-
-
-
+            if (isSignup) {
+                // Signup the user using Firebase Auth
+                await signup(email, password);
+                console.log("User signed up successfully:", currentUser);
             } else {
-                console.error("Failed to create user:", data.message);
-                setError(data.message);
+                // Login the user using Firebase Auth
+                await login(email, password);
+                console.log("User logged in successfully:", currentUser);
             }
+
+            // Redirect to User Dashboard after successful login/signup
+            navigate("/user-dashboard");
         } catch (error) {
-            console.error("Error:", error);
-            setError("Something went wrong. Please try again.");
+            console.error("Error during authentication:", error);
+            setError("Failed to authenticate. Please try again.");
         }
     };
 
-    // Handle Join Team logic
-    const handleJoinTeam = async (teamCode) => {
-        try {
-            if (!currentUser || !currentUser.uid) {
-                alert("No valid user ID found. Please log in.");
-                return;
-            }
-
-            const userId = currentUser.uid;
-
-            const response = await fetch("http://localhost:3003/api/teams/join", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ code: teamCode, userId }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                console.log("Successfully joined team:", data);
-                setShowUserDashboard(true); // Trigger User Dashboard
-            } else {
-                console.error("Failed to join team:", data.message);
-                alert(data.message || "Failed to join the team.");
-            }
-        } catch (error) {
-            console.error("Error joining team:", error);
-            alert("An error occurred while joining the team.");
-        }
-    };
 
     // Handle Create Company logic
     const handleCreateCompany = async (e) => {
         e.preventDefault();
 
-        // Ensure the current user is authenticated
         if (!currentUser || !currentUser.uid) {
             alert("No valid user ID found. Please log in.");
             return;
         }
 
-        const ownerId = currentUser.uid; // Dynamically fetched user ID
-        const companyName = e.target.elements.companyName.value; // Get company name from the form
-
-        const companyData = {
-            name: companyName,
-            //ownerId: ownerId,
-        };
+        const ownerId = currentUser.uid;
+        const companyName = e.target.elements.companyName.value;
 
         try {
             const response = await fetch("http://localhost:3003/api/companies", {
@@ -115,14 +67,14 @@ export default function Dashboard() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(companyData),
+                body: JSON.stringify({ name: companyName, ownerId }),
             });
 
             const data = await response.json();
             if (response.ok) {
                 console.log("Company and team created successfully:", data);
                 alert(`Company created successfully!\nTeam Code: ${data.team.code}`);
-                setShowJoinCreate(false); // Hide the Join/Create page or navigate to another page
+                navigate("/user-dashboard"); // Ensure navigation happens here
             } else {
                 console.error("Failed to create company:", data.message);
                 setError(data.message || "Failed to create the company.");
@@ -132,6 +84,7 @@ export default function Dashboard() {
             setError("An error occurred while creating the company.");
         }
     };
+
 
 
     // Render User Dashboard
@@ -147,22 +100,9 @@ export default function Dashboard() {
                 <div className="join-create-options">
                     <Form
                         onSubmit={(e) => {
-                            e.preventDefault();
-                            const teamCode = e.target.elements.teamCode.value;
-                            handleJoinTeam(teamCode);
-                        }}
-                    >
-                        <Form.Group>
-                            <Form.Label>Enter Team Code</Form.Label>
-                            <Form.Control type="text" name="teamCode" placeholder="Enter team code" required />
-                        </Form.Group>
-                        <Button type="submit">Join Team</Button>
-                    </Form>
-                    <Form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            const companyName = e.target.elements.companyName.value;
-                            handleCreateCompany(companyName);
+                            ////.preventDefault();
+                            //const companyName = e.target.elements.companyName.value;
+                            handleCreateCompany(e);
                         }}
                     >
                         <Form.Group>
@@ -196,18 +136,6 @@ export default function Dashboard() {
                     {error && <p className="error-text">{error}</p>}
                     <Form onSubmit={handleSubmit}>
                         <div className="inputs">
-                            {isSignup && (
-                                <div className="input">
-                                    <img src={user_icon} alt="User Icon" />
-                                    <input
-                                        type="text"
-                                        placeholder="Username"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                            )}
                             <div className="input">
                                 <img src={email_icon} alt="Email Icon" />
                                 <input

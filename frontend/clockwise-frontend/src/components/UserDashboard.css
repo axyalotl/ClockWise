@@ -1,68 +1,177 @@
-/* UserDashboard.css */
+/* General Styling */
 .user-dashboard {
     display: flex;
     height: 100vh;
+    background-color: #AAA1C8;
     font-family: Arial, sans-serif;
 }
 
+/* Sidebar */
 .sidebar {
-    width: 250px;
-    background-color: #192A51;
+    width: 20%;
+    background-color: #3c009d;
     color: white;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-items: center;
+}
+
+
+.sidebar-cat {
+    width: 80px; /* Adjust the size of the cat image */
+    height: auto;
+    margin-bottom: 10px; /* Space between the cat and "ClockWise" */
 }
 
 .sidebar h2 {
-    font-size: 24px;
     margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
     text-align: center;
 }
 
+.sidebar h2 {
+    margin-bottom: 20px;
+}
+
 .sidebar ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
-    margin: 0;
+    width: 100%;
 }
 
 .sidebar ul li {
     padding: 10px;
     cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.2s ease;
+    text-align: center;
 }
 
-.sidebar ul li:hover, .sidebar ul li.active {
-    background-color: #1F3C88;
+.sidebar ul li.active {
+    background-color: #4c00b4;
+    border-radius: 8px;
+}
+
+.sidebar ul li:hover {
+    background-color: #5c00d1;
 }
 
 .add-button {
-    margin-top: 20px;
-    width: 100%;
+    margin-top: auto;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4c00b4;
+    color: white;
+    cursor: pointer;
 }
 
+.add-button:hover {
+    background-color: #3c009d;
+}
+
+/* Main Content */
 .main-content {
-    flex: 1;
+    flex-grow: 1;
     padding: 20px;
-    background-color: #f4f4f4;
 }
 
-.header h1 {
-    font-size: 32px;
+/* Dashboard Header */
+.dashboard-header .cards-container {
+    display: flex;
+    justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+.card {
+    width: 48%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
-.card {
+.card h3 {
+    margin-bottom: 10px;
+    color: #3c009d;
+}
+
+.card button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4c00b4;
+    color: white;
+    cursor: pointer;
+}
+
+.card button:hover {
+    background-color: #3c009d;
+}
+
+/* Calendar Container */
+.calendar-container {
     background-color: white;
-    border: 1px solid #ddd;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Calendar Header */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3c009d;
+}
+
+/* Calendar Grid */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+}
+
+.calendar-day-header {
+    font-weight: bold;
+    color: #4c00b4;
+    text-align: center;
+}
+
+.calendar-day {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1; /* Ensures the bubbles are perfect squares */
+    background-color: #eaeaea;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.calendar-day .day-number {
+    font-size: 14px;
+    font-weight: bold;
+    color: #4c00b4;
+    margin: 2px; /* Keeps the number slightly away from the edges */
+}
+
+.calendar-day.empty {
+    background-color: transparent;
+    pointer-events: none; /* Empty days are non-interactive */
+}
+
+.calendar-day:hover {
+    background-color: #dcdde1;
+    cursor: pointer;
 }
