@@ -16,7 +16,7 @@ const router = express.Router();
 router.post('/login', loginUser);
 
 // Sync user with Firebase UID to MongoDB
-router.post('/sync', syncUser); // New route to sync users
+//router.post('/sync', syncUser); // New route to sync users
 
 // Existing CRUD routes
 router.get('/', getUsers);

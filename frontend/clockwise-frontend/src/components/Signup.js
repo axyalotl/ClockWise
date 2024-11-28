@@ -3,13 +3,15 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 
+
 import email_icon from "./email.png";
 import password_icon from "./password.png";
 import user_icon from "./person.png";
 
 import "./Dashboard.css";
 import "./Login"
-const Signup = ({ setIsLogin }) => {
+import {createUser} from "../api";
+const Signup = ({ setIsLogin, onAuthSuccess }) => {
     const { signup } = useAuth();
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
@@ -24,7 +26,7 @@ const Signup = ({ setIsLogin }) => {
             setError(""); // Clear any previous error
 
             // Create user in Firebase
-            const firebaseUser = await signup(email, password);
+            const firebaseUser = await signup(email, password, username);
 
             if (!firebaseUser || !firebaseUser.user) {
                 throw new Error("Firebase authentication failed.");
@@ -34,7 +36,8 @@ const Signup = ({ setIsLogin }) => {
             const user = {
                 uid: firebaseUser.user.uid, // Firebase UID
                 name: username,
-                email,
+                password: password,
+                email: email,
             };
 
             // Send user data to MongoDB via backend API
@@ -49,8 +52,8 @@ const Signup = ({ setIsLogin }) => {
                 throw new Error(data.message || "Failed to save user to database.");
             }
 
-            // Redirect to user dashboard on successful signup
-            navigate("/user-dashboard");
+            // Call the parent callback to handle redirection
+            onAuthSuccess();
         } catch (err) {
             // Display detailed error message
             setError(err.message || "Failed to signup. Please try again.");
