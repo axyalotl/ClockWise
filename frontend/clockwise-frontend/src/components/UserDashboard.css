@@ -175,3 +175,25 @@
     background-color: #dcdde1;
     cursor: pointer;
 }
+
+.h-popup-main {
+    font-size:24px;
+    font-weight: bold;
+    margin: 2px;
+}
+
+.h-popup-text {
+    font-size:16px;
+
+    margin: 2px;
+}
+
+.add-button-popup {
+    margin-top: 4px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4c00b4;
+    color: white;
+    cursor: pointer;
+}
