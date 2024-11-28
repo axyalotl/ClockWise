@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -7,6 +8,7 @@ import {
 } from 'firebase/auth';
 import { auth } from './firebase-config.js';
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 
 const AuthContext = createContext();
 
@@ -25,22 +27,45 @@ export const AuthProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
-  const signup = async (email, password) => {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
 
-    // Send user data to backend for MongoDB storage
-    await fetch("http://localhost:3003/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        uid: user.uid,
-        email: user.email,
-      }),
-    });
+  const signup = async (email, password, username) => {
+    const auth = getAuth(); // Ensure auth is correctly initialized
 
-    return user;
+    try {
+      // Firebase Authentication: Create a user with email and password
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Optionally update the display name in Firebase
+      //await updateProfile(user, { displayName: username });
+
+      // Send user data to the backend for MongoDB storage
+      const response = await fetch("http://localhost:3003/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          uid: user.uid,
+          name: username,
+          password, // Send plain text password (if backend hashes it)
+          email: user.email,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Failed to save user to the database.");
+      }
+
+      return user; // Return Firebase user object on success
+    } catch (error) {
+      const errorCode = error.code || "Unknown_Error";
+      const errorMessage = error.message || "Unknown error occurred during signup.";
+      console.error(`Signup Error (${errorCode}): ${errorMessage}`);
+      throw new Error(errorMessage); // Throw error to be caught in `Signup` component
+    }
   };
+
+
 
   const login = async (email, password) => {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -69,4 +94,4 @@ export const AuthProvider = ({ children }) => {
         {!loading && children}
       </AuthContext.Provider>
   );
-};
+}
