@@ -9,19 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12931144-4b51-465e-a137-e1737b4865e2" name="Changes" comment="Sucessfully login then redirected to dashboard page w/ Calendar and icons">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/models/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/User.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/routes/userRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/userRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/clockwise-frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/clockwise-frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/clockwise-frontend/src/components/Dashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/clockwise-frontend/src/components/Dashboard.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/clockwise-frontend/src/components/Dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/clockwise-frontend/src/components/Dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/clockwise-frontend/src/components/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/clockwise-frontend/src/components/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/clockwise-frontend/src/components/Register.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/clockwise-frontend/src/components/Register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/clockwise-frontend/src/components/UserDashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/clockwise-frontend/src/components/UserDashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/clockwise-frontend/src/contexts/AuthContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/clockwise-frontend/src/contexts/AuthContext.js" afterDir="false" />
-    </list>
+    <list default="true" id="12931144-4b51-465e-a137-e1737b4865e2" name="Changes" comment="Huge changes and updates on project: failed login and Firebase authentication failed for signup" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -174,7 +162,7 @@
       <workItem from="1732674792095" duration="1748000" />
       <workItem from="1732676912529" duration="1919000" />
       <workItem from="1732721174770" duration="2755000" />
-      <workItem from="1732764552785" duration="8153000" />
+      <workItem from="1732764552785" duration="8506000" />
     </task>
     <task id="LOCAL-00001" summary="The rest of the APP for frontend">
       <option name="closed" value="true" />
@@ -296,7 +284,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732724194812</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Huge changes and updates on project: failed login and Firebase authentication failed for signup">
+      <option name="closed" value="true" />
+      <created>1732772903649</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1732772903649</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -322,6 +318,7 @@
     <MESSAGE value="Sucessfully connects with back and front and shows on mdb" />
     <MESSAGE value="Semi works but issues with firebase again" />
     <MESSAGE value="Sucessfully login then redirected to dashboard page w/ Calendar and icons" />
-    <option name="LAST_COMMIT_MESSAGE" value="Sucessfully login then redirected to dashboard page w/ Calendar and icons" />
+    <MESSAGE value="Huge changes and updates on project: failed login and Firebase authentication failed for signup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Huge changes and updates on project: failed login and Firebase authentication failed for signup" />
   </component>
 </project>
