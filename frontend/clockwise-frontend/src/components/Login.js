@@ -8,6 +8,10 @@ import password_icon from "./password.png";
 import user_icon from "./person.png";
 
 import "./Dashboard.css";
+import "./Register"
+import Dashboard from "./Dashboard";
+
+import { Link } from "react-router-dom";
 
 const Login = ({ setIsLogin }) => { // Receive setIsLogin as a prop
     const { login } = useAuth();
@@ -55,16 +59,7 @@ const Login = ({ setIsLogin }) => { // Receive setIsLogin as a prop
                 </div>
                 <Form onSubmit={handleLogin}>
                     <div className="inputs">
-                        <div className="input">
-                            <img src={user_icon} alt="Username Icon" />
-                            <input
-                                type="text"
-                                placeholder="Username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                required
-                            />
-                        </div>
+
                         <div className="input">
                             <img src={email_icon} alt="Email Icon" />
                             <input
@@ -93,12 +88,7 @@ const Login = ({ setIsLogin }) => { // Receive setIsLogin as a prop
                         </Button>
                     </div>
                 </Form>
-                <div className="toggle-text">
-                    Don't have an account?{" "}
-                    <Button variant="link" onClick={() => setIsLogin(false)}> {/* Use setIsLogin to switch */}
-                        Signup
-                    </Button>
-                </div>
+
             </div>
         </div>
     );

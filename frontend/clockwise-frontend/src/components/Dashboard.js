@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Login from "./Login";
 import Signup from "./Signup";
 import "./Dashboard.css";
-
+import  "./Welcome.css"
 const Dashboard = () => {
     const [isSignup, setIsSignup] = useState(false); // Default to Login page
 
@@ -16,6 +16,7 @@ const Dashboard = () => {
                     <Login />
                 )}
                 <div className="auth-toggle">
+
                     {isSignup ? (
                         <button
                             onClick={() => setIsSignup(false)}
@@ -30,6 +31,7 @@ const Dashboard = () => {
                         </button>
                     )}
                 </div>
+
             </div>
         </div>
     );

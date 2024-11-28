@@ -8,7 +8,7 @@ import password_icon from "./password.png";
 import user_icon from "./person.png";
 
 import "./Dashboard.css";
-
+import "./Login"
 const Signup = ({ setIsLogin }) => {
     const { signup } = useAuth();
     const navigate = useNavigate();
@@ -104,12 +104,7 @@ const Signup = ({ setIsLogin }) => {
                         </Button>
                     </div>
                 </Form>
-                <div className="toggle-text">
-                    Already have an account?{" "}
-                    <Button variant="link" onClick={() => setIsLogin(true)} style={{ padding: 0 }}>
-                        Login
-                    </Button>
-                </div>
+
             </div>
         </div>
     );
