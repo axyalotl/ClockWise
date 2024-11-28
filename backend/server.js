@@ -4,6 +4,8 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
+const scheduleRoutes = require('./routes/scheduleRoutes'); // Import the schedule routes
+
 require('dotenv').config(); // Ensure dotenv is configured
 
 const app = express();
@@ -19,6 +21,7 @@ connectDB();
 // Use routes
 app.use('/api/users', userRoutes);
 app.use('/api/appointments', appointmentRoutes);
+app.use('/api/schedules', scheduleRoutes);
 
 // Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

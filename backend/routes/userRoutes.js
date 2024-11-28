@@ -1,18 +1,22 @@
 const express = require('express');
-const { 
-  getUsers, 
-  createUser, 
-  updateUser, 
-  deleteUser, 
-  getUserById, 
-  loginUser, 
-  getUserAvailability // Import the new controller function
+const {
+  getUsers,
+  createUser,
+  updateUser,
+  deleteUser,
+  getUserById,
+  loginUser,
+  getUserAvailability,
+  syncUser // Import the new controller function
 } = require('../controllers/userController');
 
 const router = express.Router();
 
 // Login route
 router.post('/login', loginUser);
+
+// Sync user with Firebase UID to MongoDB
+router.post('/sync', syncUser); // New route to sync users
 
 // Existing CRUD routes
 router.get('/', getUsers);

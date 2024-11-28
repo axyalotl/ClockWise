@@ -1,13 +1,37 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
-const UserSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ['Admin', 'Employee', 'Guest'], default: 'Guest' },
+// Define the User Schema
+const UserSchema = new mongoose.Schema(
+    {
+      uid: { type: String, required: true, unique: true }, // Firebase UID
+      name: { type: String, required: true },
+      email: { type: String, required: true, unique: true },
+      password: { type: String, required: true },
+      role: { type: String, enum: ['Admin', 'Employee', 'Guest'], default: 'Guest' },
+    },
+    { timestamps: true } // Add timestamps for createdAt and updatedAt
+);
+
+// Middleware: Hash password before saving to the database
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next(); // Only hash if the password field is modified
+  try {
+    const salt = await bcrypt.genSalt(10); // Generate a salt
+    this.password = await bcrypt.hash(this.password, salt); // Hash the password
+    next();
+  } catch (error) {
+    next(error); // Pass the error to the next middleware
+  }
 });
 
-UserSchema.methods.getAvailableShifts = async function() {
+// Method: Check if the password is correct
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
+
+// Method: Get available shifts for the user
+UserSchema.methods.getAvailableShifts = async function () {
   const EmployeeShift = require('./Employee_Shift');
   const Appointment = require('./Appointment');
 
@@ -32,23 +56,19 @@ UserSchema.methods.getAvailableShifts = async function() {
   };
 
   // Filter shifts that do not conflict with appointments
-  const availableShifts = shifts.filter(shift => {
+  const availableShifts = shifts.filter((shift) => {
     const shiftStart = parseDateTime(shift.startTime);
     const shiftEnd = parseDateTime(shift.endTime);
 
-    return !appointments.some(appointment => {
+    return !appointments.some((appointment) => {
       const appointmentStart = parseDateTime(appointment.date);
       const appointmentEnd = new Date(appointmentStart.getTime());
       appointmentEnd.setMinutes(appointmentEnd.getMinutes() + appointment.duration);
 
-      // Check for overlap, excluding exact boundary matches
-      // A shift is considered available if:
-      // - The appointment ends exactly when the shift starts (appointmentEnd equals shiftStart)
-      // - The appointment starts exactly when the shift ends (appointmentStart equals shiftEnd)
-      const hasConflict = (
-        appointmentStart < shiftEnd && // Appointment starts before shift ends
-        appointmentEnd > shiftStart    // Appointment ends after shift starts
-      );
+      // Check for overlap
+      const hasConflict =
+          appointmentStart < shiftEnd && // Appointment starts before shift ends
+          appointmentEnd > shiftStart; // Appointment ends after shift starts
 
       return hasConflict;
     });
@@ -57,4 +77,5 @@ UserSchema.methods.getAvailableShifts = async function() {
   return availableShifts;
 };
 
+// Export the User model
 module.exports = mongoose.model('User', UserSchema);

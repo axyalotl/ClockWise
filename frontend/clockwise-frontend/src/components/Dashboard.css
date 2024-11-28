@@ -156,22 +156,21 @@ body {
     margin: auto;
     text-align: center;
   }
-  
+
   .forgot-password-container h2 {
     color: #4c00b4;
   }
-  
+
   .error-text {
     color: red;
   }
-  
+
   .success-text {
     color: green;
   }
-  
+
   .forgot-password-container form {
     display: flex;
     flex-direction: column;
     gap: 15px;
   }
-  

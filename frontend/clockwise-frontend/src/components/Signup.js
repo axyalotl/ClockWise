@@ -9,40 +9,51 @@ import user_icon from "./person.png";
 
 import "./Dashboard.css";
 
-const Login = ({ setIsLogin }) => { // Receive setIsLogin as a prop
-    const { login } = useAuth();
+const Signup = ({ setIsLogin }) => {
+    const { signup } = useAuth();
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
 
-    const handleLogin = async (e) => {
+    const handleSignup = async (e) => {
         e.preventDefault();
+
         try {
-            setError("");
-            const firebaseUser = await login(email, password);
+            setError(""); // Clear any previous error
+
+            // Create user in Firebase
+            const firebaseUser = await signup(email, password);
+
+            if (!firebaseUser || !firebaseUser.user) {
+                throw new Error("Firebase authentication failed.");
+            }
+
+            // Prepare user data to send to the backend
             const user = {
-                uid: firebaseUser.user.uid, // Use Firebase UID
-                username, // Username entered by the user
+                uid: firebaseUser.user.uid, // Firebase UID
+                name: username,
                 email,
             };
 
-            const response = await fetch("http://localhost:3003/api/users/login", {
+            // Send user data to MongoDB via backend API
+            const response = await fetch("http://localhost:3003/api/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(user),
             });
 
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.message || "Failed to authenticate user");
+            if (!response.ok) {
+                const data = await response.json();
+                throw new Error(data.message || "Failed to save user to database.");
+            }
 
-            console.log("Login Successful. Backend Response:", data);
-
+            // Redirect to user dashboard on successful signup
             navigate("/user-dashboard");
         } catch (err) {
-            console.error("Login Error:", err);
-            setError("Failed to login. Please try again.");
+            // Display detailed error message
+            setError(err.message || "Failed to signup. Please try again.");
         }
     };
 
@@ -50,10 +61,10 @@ const Login = ({ setIsLogin }) => { // Receive setIsLogin as a prop
         <div>
             <div className="container">
                 <div className="header">
-                    <div className="text">Login</div>
+                    <div className="text">Signup</div>
                     <div className="underline"></div>
                 </div>
-                <Form onSubmit={handleLogin}>
+                <Form onSubmit={handleSignup}>
                     <div className="inputs">
                         <div className="input">
                             <img src={user_icon} alt="Username Icon" />
@@ -89,14 +100,14 @@ const Login = ({ setIsLogin }) => { // Receive setIsLogin as a prop
                     {error && <p className="error-text">{error}</p>}
                     <div className="submit-container">
                         <Button type="submit" className="submit">
-                            Login
+                            Signup
                         </Button>
                     </div>
                 </Form>
                 <div className="toggle-text">
-                    Don't have an account?{" "}
-                    <Button variant="link" onClick={() => setIsLogin(false)}> {/* Use setIsLogin to switch */}
-                        Signup
+                    Already have an account?{" "}
+                    <Button variant="link" onClick={() => setIsLogin(true)} style={{ padding: 0 }}>
+                        Login
                     </Button>
                 </div>
             </div>
@@ -104,4 +115,4 @@ const Login = ({ setIsLogin }) => { // Receive setIsLogin as a prop
     );
 };
 
-export default Login;
+export default Signup;
