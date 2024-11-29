@@ -9,7 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12931144-4b51-465e-a137-e1737b4865e2" name="Changes" comment="Commiting everything">
+    <list default="true" id="12931144-4b51-465e-a137-e1737b4865e2" name="Changes" comment="Working Login and Firebase with MangoDB">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/controllers/userController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controllers/userController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/clockwise-frontend/src/UserForm.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/clockwise-frontend/src/UserForm.js" afterDir="false" />
@@ -172,7 +172,7 @@
       <workItem from="1732721174770" duration="2755000" />
       <workItem from="1732764552785" duration="8620000" />
       <workItem from="1732816548796" duration="9755000" />
-      <workItem from="1732826983660" duration="12790000" />
+      <workItem from="1732826983660" duration="14520000" />
     </task>
     <task id="LOCAL-00001" summary="The rest of the APP for frontend">
       <option name="closed" value="true" />
@@ -334,7 +334,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732844997289</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Working Login and Firebase with MangoDB">
+      <option name="closed" value="true" />
+      <created>1732849570334</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1732849570334</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -366,6 +374,7 @@
     <MESSAGE value="UID issue when creating account, can't find it in UserForm insertion" />
     <MESSAGE value="FUCKING HELL IT PUSHED. can login and firebase is okay with it uhhh idk about mongo" />
     <MESSAGE value="Commiting everything" />
-    <option name="LAST_COMMIT_MESSAGE" value="Commiting everything" />
+    <MESSAGE value="Working Login and Firebase with MangoDB" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working Login and Firebase with MangoDB" />
   </component>
 </project>

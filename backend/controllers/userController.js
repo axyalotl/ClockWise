@@ -41,7 +41,6 @@ const createUser = async (req, res) => {
 
   try {
 
-
     // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -53,12 +52,19 @@ const createUser = async (req, res) => {
       role
     });
 
+    // removing this results in no saving to Mongo but without it can push to the next page
+    const savedUser = await newUser.save();
 
-    res.status(201).json(newUser);
-
+    res.status(201).json(savedUser);
 
   } catch (error) {
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ message: 'Validation error', details: error.errors });
+    }
 
+    if (error.code === 11000) { // MongoDB duplicate key error
+      return res.status(400).json({ message: 'Email already in use.' });
+    }
     res.status(500).json({ message: 'Failed to create user. UserController', error: error.message });
   }
 };
