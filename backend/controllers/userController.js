@@ -33,35 +33,33 @@ const getUserById = async (req, res) => {
 
 // Create a new user
 const createUser = async (req, res) => {
-  const {uid, name, password, email, role = 'User' } = req.body;
+  const {uid, name, password, email, role = 'Guest' } = req.body;
 
   if ( !name || !email || !password) {
     return res.status(400).json({ message: 'Name, email, and password are required' });
   }
 
   try {
-    User.findOne({ email: email })
-        .then(user => {
-          if (user) {
-            return res.status(400).json({message: 'User with this email already exists'});
-          }
-        })
-    /*
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: 'User with this email already exists' });
-    }]*/
+
 
     // Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({uid ,name, email, hashedPassword});
+    const newUser = new User({
+      uid,
+      name,
+      email,
+      password: hashedPassword,
+      role
+    });
+
 
     res.status(201).json(newUser);
 
 
   } catch (error) {
-    res.status(500).json({ message: 'Failed to create user', error: error.message });
+
+    res.status(500).json({ message: 'Failed to create user. UserController', error: error.message });
   }
 };
 
