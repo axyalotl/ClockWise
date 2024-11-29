@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { createUser } from './api'; // Import the API function you created
 
+
 const UserForm = () => {
+  const [formUID, setFormUID] = useState('');
   const [formName, setFormName] = useState('');
   const [formEmail, setFormEmail] = useState('');
   const [formPassword, setFormPassword] = useState('');
@@ -11,6 +13,7 @@ const UserForm = () => {
     event.preventDefault();
     try {
       const userData = {
+        uid: formUID,
         name: formName,
         email: formEmail,
         password: formPassword,

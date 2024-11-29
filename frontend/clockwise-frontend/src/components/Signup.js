@@ -38,9 +38,11 @@ const Signup = ({ setIsLogin, onAuthSuccess }) => {
                 name: username,
                 password: password,
                 email: email,
+                role: ""
             };
 
             // Send user data to MongoDB via backend API
+
             const response = await fetch("http://localhost:3003/api/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

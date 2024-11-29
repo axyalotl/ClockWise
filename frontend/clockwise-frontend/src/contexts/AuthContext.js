@@ -33,11 +33,9 @@ export const AuthProvider = ({ children }) => {
 
     try {
       // Firebase Authentication: Create a user with email and password
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
 
-      // Optionally update the display name in Firebase
-      //await updateProfile(user, { displayName: username });
+      const userCredential = createUserWithEmailAndPassword(auth, email, password)
+      const user = userCredential.user;
 
       // Send user data to the backend for MongoDB storage
       const response = await fetch("http://localhost:3003/api/users", {
@@ -46,8 +44,9 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({
           uid: user.uid,
           name: username,
-          password, // Send plain text password (if backend hashes it)
-          email: user.email,
+          email: email,
+          password: password, // Send plain text password (if backend hashes it)
+          role: "Guest"
         }),
       });
 
