@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }) => {
     try {
       // Firebase Authentication: Create a user with email and password
 
-      const userCredential = createUserWithEmailAndPassword(auth, email, password)
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
       const user = userCredential.user;
 
       // Send user data to the backend for MongoDB storage

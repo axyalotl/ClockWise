@@ -28,13 +28,13 @@ const Signup = ({ setIsLogin, onAuthSuccess }) => {
             // Create user in Firebase
             const firebaseUser = await signup(email, password, username);
 
-            if (!firebaseUser || !firebaseUser.user) {
+            if (!firebaseUser) {
                 throw new Error("Firebase authentication failed.");
             }
 
             // Prepare user data to send to the backend
             const user = {
-                uid: firebaseUser.user.uid, // Firebase UID
+                uid: firebaseUser.uid, // Firebase UID
                 name: username,
                 password: password,
                 email: email,
