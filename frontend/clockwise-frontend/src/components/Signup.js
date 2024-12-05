@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
-
+import "./UserDashboard";
 
 import email_icon from "./email.png";
 import password_icon from "./password.png";
@@ -11,6 +11,7 @@ import user_icon from "./person.png";
 import "./Dashboard.css";
 import "./Login"
 import {createUser} from "../api";
+import UserDashboard from "./UserDashboard";
 const Signup = ({ setIsLogin, onAuthSuccess }) => {
     const { signup } = useAuth();
     const navigate = useNavigate();
@@ -26,9 +27,10 @@ const Signup = ({ setIsLogin, onAuthSuccess }) => {
             setError(""); // Clear any previous error
 
             // Create user in Firebase
-            const firebaseUser = await signup(email, password, username);
+            const firebaseUser = await signup(email, password);
 
             if (!firebaseUser) {
+
                 throw new Error("Firebase authentication failed.");
             }
 
@@ -38,7 +40,7 @@ const Signup = ({ setIsLogin, onAuthSuccess }) => {
                 name: username,
                 password: password,
                 email: email,
-                role: ""
+                role: "",
             };
 
             // Send user data to MongoDB via backend API
@@ -49,17 +51,22 @@ const Signup = ({ setIsLogin, onAuthSuccess }) => {
                 body: JSON.stringify(user),
             });
 
+
+
             if (!response.ok) {
                 const data = await response.json();
                 throw new Error(data.message || "Failed to save user to database.");
             }
 
             // Call the parent callback to handle redirection
-            onAuthSuccess();
+
+            navigate("/user-dashboard");
+
         } catch (err) {
             // Display detailed error message
             setError(err.message || "Failed to signup. Please try again.");
         }
+
     };
 
     return (

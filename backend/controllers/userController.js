@@ -33,10 +33,11 @@ const getUserById = async (req, res) => {
 
 // Create a new user
 const createUser = async (req, res) => {
-  const {uid, name, password, email, role = 'Guest' } = req.body;
+  const {uid, name = "temp", password, email, role = 'Guest' } = req.body;
 
   if ( !name || !email || !password) {
-    return res.status(400).json({ message: 'Name, email, and password are required' });
+    // not giving a name? for some reason
+    return res.status(400).json({ message: 'Name, email, and password are required' + name + email + password });
   }
 
   try {
@@ -53,9 +54,9 @@ const createUser = async (req, res) => {
     });
 
     // removing this results in no saving to Mongo but without it can push to the next page
-    const savedUser = await newUser.save();
+    // await newUser.save();
 
-    res.status(201).json(savedUser);
+    return res.status(201).json(newUser);
 
   } catch (error) {
     if (error.name === 'ValidationError') {
@@ -65,8 +66,10 @@ const createUser = async (req, res) => {
     if (error.code === 11000) { // MongoDB duplicate key error
       return res.status(400).json({ message: 'Email already in use.' });
     }
-    res.status(500).json({ message: 'Failed to create user. UserController', error: error.message });
+    return res.status(500).json({ message: 'Failed to create user. UserController', error: error.message });
   }
+
+
 };
 
 // Login user
