@@ -9,6 +9,7 @@ import password_icon from "./password.png";
 import user_icon from "./person.png";
 
 import "./Dashboard.css";
+
 import "./Login"
 import {createUser} from "../api";
 import UserDashboard from "./UserDashboard";
@@ -110,11 +111,12 @@ const Signup = ({ setIsLogin, onAuthSuccess }) => {
                         </div>
                     </div>
                     {error && <p className="error-text">{error}</p>}
-                    <div className="submit-container">
+                    <div className="container">
                         <Button type="submit" className="submit">
                             Signup
                         </Button>
                     </div>
+
                 </Form>
 
             </div>

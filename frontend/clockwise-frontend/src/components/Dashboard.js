@@ -23,17 +23,17 @@ const Dashboard = () => {
                 ) : (
                     <Login onAuthSuccess={handleAuthSuccess} />
                 )}
-                <div className="auth-toggle">
+                <div className="container">
                     {isSignup ? (
                         <button
                             onClick={() => setIsSignup(false)}
-                            className="auth-toggle-button">
+                            className="welcome-button">
                             Already have an account? Login
                         </button>
                     ) : (
                         <button
                             onClick={() => setIsSignup(true)}
-                            className="auth-toggle-button">
+                            className="welcome-button">
                             Don't have an account? Signup
                         </button>
                     )}
