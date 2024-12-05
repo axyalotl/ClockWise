@@ -33,7 +33,7 @@ const getUserById = async (req, res) => {
 
 // Create a new user
 const createUser = async (req, res) => {
-  const {uid, name = "temp", password, email, role = 'Guest' } = req.body;
+  const {uid, name , password, email, role = 'Guest' } = req.body;
 
   if ( !name || !email || !password) {
     // not giving a name? for some reason

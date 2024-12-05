@@ -27,7 +27,7 @@ const Signup = ({ setIsLogin, onAuthSuccess }) => {
             setError(""); // Clear any previous error
 
             // Create user in Firebase
-            const firebaseUser = await signup(email, password);
+            const firebaseUser = await signup(email, password, username);
 
             if (!firebaseUser) {
 
