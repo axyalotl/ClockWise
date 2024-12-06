@@ -23,7 +23,7 @@ Key features include:
 ## Technologies Used
 - **Frontend**: React.js, HTML, CSS, JavaScript
 - **Backend**: Node.js, Express.js
-- **Database**: MongoDB (via Mongoose) or MySQL (via Sequelize)
+- **Database**: MongoDB (via Mongoose)
 - **Version Control**: Git & GitHub
 - **Project Management**: Jira
 
@@ -31,7 +31,62 @@ Key features include:
 
 To run this project locally, follow these steps:
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/JolinaJ/ClockWise.git
-   cd ClockWise
+Step 1: Run the following command to clone the repository:
+
+git clone https://github.com/JolinaJ/ClockWise.git
+cd ClockWise
+
+Step 2: Install the required packages for both the frontend and backend.
+
+Frontend:
+cd clockwise/frontend/clockwise-frontend
+npm install
+
+Backend:
+cd clockwise/backend
+npm install
+
+Step 3: Start both the frontend and backend servers.
+
+Frontend:
+npm start
+
+Backend:
+node server.js
+
+**Usage**
+
+Once both servers are running, you can access the application locally:
+
+Frontend: http://localhost:3000
+Backend: http://localhost:3003
+
+Example Scenarios:
+
+Admins can manage company settings and employee shifts
+
+Employees can set their availability and view schedules
+
+Guests can book appointments and view available times
+
+**Contributing**
+
+To contribute:
+
+Fork the repository.
+
+Create a new branch for your feature or bug fix:
+
+git checkout -b feature-name
+
+Commit your changes:
+
+git commit -m "Description of changes"
+
+Push to your branch:
+
+git push origin feature-name
+
+Open a pull request.
+
+![alt text](image.png)
