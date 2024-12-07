@@ -82,10 +82,15 @@ const Login = ({ setIsLogin }) => { // Receive setIsLogin as a prop
                         </div>
                     </div>
                     {error && <p className="error-text">{error}</p>}
-                    <div className="submit-container">
+                    <div className="submit-container" style = {{ display: 'flex', gap: '50px' }}>
                         <Button type="submit" className="submit">
                             Login
                         </Button>
+
+                        <Button className="text-button">
+                            Reset Password
+                        </Button>
+
                     </div>
                 </Form>
 

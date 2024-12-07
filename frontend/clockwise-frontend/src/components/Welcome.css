@@ -22,10 +22,19 @@
     margin-bottom: 30px;
 }
 
+
+.container {
+    display: flex;
+    justify-content: center;  /* Center horizontally */
+    margin: 0;                /* Remove any default margin */
+}
+
 .welcome-button {
     padding: 15px 30px;
     font-size: 1.2rem;
     color: #4c00b4;
+    align-items: center;
+    justify-content: center;
     background-color: #f3e5f5; /* Light purple button color */
     border: none;
     border-radius: 50px;

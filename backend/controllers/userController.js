@@ -54,7 +54,7 @@ const createUser = async (req, res) => {
     });
 
     // removing this results in no saving to Mongo but without it can push to the next page
-    // await newUser.save();
+    await newUser.save();
 
     return res.status(201).json(newUser);
 
