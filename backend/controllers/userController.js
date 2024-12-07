@@ -76,27 +76,37 @@ const createUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
+  console.log("Login attempt received:", { email });
+
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
   try {
     const user = await User.findOne({ email });
+    console.log("User fetched from database:", user);
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     // Compare the provided password with the hashed password
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log("Password match result:", isMatch);
+
     if (!isMatch) {
+      console.log(`Password mismatch for email: ${email}`);
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
+    console.log("Login successful for email:", email);
     res.status(200).json({ message: 'Login successful', user });
   } catch (error) {
+    console.error("Error during login:", error.message);
     res.status(500).json({ message: 'Error logging in', error: error.message });
   }
 };
+
 
 // Update a user
 const updateUser = async (req, res) => {

@@ -8,15 +8,10 @@ import password_icon from "./password.png";
 import user_icon from "./person.png";
 
 import "./Dashboard.css";
-import "./Register"
-import Dashboard from "./Dashboard";
 
-import { Link } from "react-router-dom";
-
-const Login = ({ setIsLogin }) => { // Receive setIsLogin as a prop
+const Login = ({ setIsLogin }) => { 
     const { login } = useAuth();
     const navigate = useNavigate();
-    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -25,76 +20,74 @@ const Login = ({ setIsLogin }) => { // Receive setIsLogin as a prop
         e.preventDefault();
         try {
             setError("");
-            const firebaseUser = await login(email, password);
-            const user = {
-                uid: firebaseUser.user.uid, // Use Firebase UID
-                username, // Username entered by the user
-                email,
-            };
 
-            const response = await fetch("http://localhost:3003/api/users/login", {
+            // Authenticate user with Firebase
+            const firebaseUser = await login(email, password);
+
+            if (!firebaseUser) {
+                throw new Error("Firebase authentication failed.");
+            }
+
+            // Validate user with backend
+            const response = await fetch("http://localhost:3003/api/Users/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(user),
+                body: JSON.stringify({ email, password }),
             });
 
             const data = await response.json();
-            if (!response.ok) throw new Error(data.message || "Failed to authenticate user");
+            if (!response.ok) {
+                throw new Error(data.message || "Failed to authenticate user.");
+            }
 
-            console.log("Login Successful. Backend Response:", data);
-
+            console.log("Login successful:", data);
             navigate("/user-dashboard");
         } catch (err) {
-            console.error("Login Error:", err);
-            setError("Failed to login. Please try again.");
+            console.error("Login error:", err);
+            setError("Failed to login. Please check your email or password.");
         }
     };
 
     return (
-        <div>
-            <div className="container">
-                <div className="header">
-                    <div className="text">Login</div>
-                    <div className="underline"></div>
-                </div>
-                <Form onSubmit={handleLogin}>
-                    <div className="inputs">
-
-                        <div className="input">
-                            <img src={email_icon} alt="Email Icon" />
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div className="input">
-                            <img src={password_icon} alt="Password Icon" />
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                    </div>
-                    {error && <p className="error-text">{error}</p>}
-                    <div className="submit-container" style = {{ display: 'flex', gap: '50px' }}>
-                        <Button type="submit" className="submit">
-                            Login
-                        </Button>
-
-                        <Button className="text-button">
-                            Reset Password
-                        </Button>
-
-                    </div>
-                </Form>
-
+        <div className="container">
+            <div className="header">
+                <div className="text">Login</div>
+                <div className="underline"></div>
             </div>
+            <Form onSubmit={handleLogin}>
+                <div className="inputs">
+                    <div className="input">
+                        <img src={email_icon} alt="Email Icon" />
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className="input">
+                        <img src={password_icon} alt="Password Icon" />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                </div>
+                {error && <p className="error-text">{error}</p>}
+                <div className="submit-container" style={{ display: 'flex', gap: '50px' }}>
+                    <Button type="submit" className="submit">
+                        Login
+                    </Button>
+
+                    <Button className="text-button">
+                        Reset Password
+                    </Button>
+                </div>
+            </Form>
         </div>
     );
 };
